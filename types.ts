@@ -1,3 +1,4 @@
+
 export interface BusinessResult {
   name: string;
   phone: string;
@@ -5,7 +6,13 @@ export interface BusinessResult {
   website: string;
 }
 
-export interface SearchParams {
+export interface AdvancedSearchOptions {
+  industry?: string;
+  companySize?: string;
+  yearsInOperation?: string;
+}
+
+export interface SearchParams extends AdvancedSearchOptions {
   keyword: string;
   city: string;
 }

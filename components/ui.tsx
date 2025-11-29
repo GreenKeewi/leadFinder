@@ -1,4 +1,5 @@
-import React from 'react';
+
+import React, { useState } from 'react';
 import { Loader2 } from 'lucide-react';
 
 // --- Card Components ---
@@ -112,3 +113,45 @@ export const Skeleton = ({ className, ...props }: React.HTMLAttributes<HTMLDivEl
 
 // --- Loading Spinner ---
 export const Spinner = () => <Loader2 className="mr-2 h-4 w-4 animate-spin" />;
+
+// --- Tooltip Components (Custom implementation mimicking shadcn/radix) ---
+const TooltipContext = React.createContext<{ open: boolean; setOpen: (open: boolean) => void }>({
+  open: false,
+  setOpen: () => {},
+});
+
+export const TooltipProvider = ({ children }: { children: React.ReactNode }) => <>{children}</>;
+
+export const Tooltip = ({ children }: { children: React.ReactNode }) => {
+  const [open, setOpen] = useState(false);
+  return (
+    <TooltipContext.Provider value={{ open, setOpen }}>
+      <div 
+        className="relative inline-flex flex-col items-center justify-center"
+        onMouseEnter={() => setOpen(true)}
+        onMouseLeave={() => setOpen(false)}
+      >
+        {children}
+      </div>
+    </TooltipContext.Provider>
+  );
+};
+
+export const TooltipTrigger = ({ children, asChild, ...props }: any) => {
+  return <>{children}</>;
+};
+
+export const TooltipContent = ({ children, className, ...props }: any) => {
+  const { open } = React.useContext(TooltipContext);
+  
+  if (!open) return null;
+
+  return (
+    <div
+      className={`absolute bottom-full mb-2 z-50 overflow-hidden rounded-md border bg-popover px-3 py-1.5 text-sm text-popover-foreground shadow-md animate-in fade-in-0 zoom-in-95 ${className || ""}`}
+      {...props}
+    >
+      {children}
+    </div>
+  );
+};

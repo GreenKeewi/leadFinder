@@ -1,5 +1,5 @@
 {
-  "name": "Ontario Business Finder",
-  "description": "A minimalist tool to find business information in Ontario using AI-powered search grounding.",
+  "name": "North America Business Finder",
+  "description": "A minimalist tool to find business information across North America using AI-powered search grounding.",
   "requestFramePermissions": []
 }

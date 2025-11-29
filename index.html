@@ -1,17 +1,21 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Ontario Business Finder</title>
+    <title>North America Business Finder</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
     <script>
       tailwind.config = {
         theme: {
           extend: {
             fontFamily: {
-              sans: ['Inter', 'sans-serif'],
+              sans: ['Roboto', 'sans-serif'],
+              serif: ['Roboto', 'sans-serif'], // Remapping serif to Roboto as well since the user asked for Roboto UI globally
             },
             colors: {
               border: "hsl(var(--border))",
@@ -81,7 +85,7 @@
         --radius: 0.5rem;
       }
       body {
-        font-family: 'Inter', sans-serif;
+        font-family: 'Roboto', sans-serif;
         background-color: hsl(var(--background));
         color: hsl(var(--foreground));
         -webkit-font-smoothing: antialiased;
@@ -93,7 +97,7 @@
     "react/": "https://aistudiocdn.com/react@^19.2.0/",
     "react": "https://aistudiocdn.com/react@^19.2.0",
     "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.0/",
-    "framer-motion": "https://aistudiocdn.com/framer-motion@^12.23.24",
+    "framer-motion": "https://aistudiocdn.com/framer-motion@^11.0.8",
     "@google/genai": "https://aistudiocdn.com/@google/genai@^1.30.0",
     "lucide-react": "https://aistudiocdn.com/lucide-react@^0.555.0"
   }
