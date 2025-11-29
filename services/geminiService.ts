@@ -42,13 +42,12 @@ export const fetchBusinessData = async (keyword: string, city: string, options?:
     const prompt = `Find 20 to 25 real businesses in ${city} (North America) that match the keyword "${keyword}".
     ${advancedInstructions}
     
-    CRITICAL REQUIREMENT: Only return businesses that have ALL of the following:
-    1. A valid Phone Number
-    2. A valid Website URL
-    
-    Physical Address is preferred but OPTIONAL. If a business does not have a specific address (e.g. online only or service area), return "N/A" for address.
-
-    If a business is missing a Phone Number or Website, DO NOT include it in the list.
+    CRITICAL INSTRUCTIONS:
+    1. Only return businesses that have a valid Phone Number and Website URL.
+    2. Physical Address is optional (use "N/A" if unavailable).
+    3. If you cannot find businesses strictly matching the advanced filters (e.g. Years in Operation), YOU MUST RELAX THOSE FILTERS and return the best available matches rather than returning nothing or an error message.
+    4. DO NOT return an explanation, apology, or conversational text.
+    5. RETURN ONLY A RAW JSON ARRAY.
 
     For each business, return the Name, Phone Number, Address, and Website URL.
 
@@ -115,11 +114,19 @@ export const fetchBusinessData = async (keyword: string, city: string, options?:
 
     } catch (parseError) {
       console.error("Failed to parse Gemini response:", text);
-      throw new Error("Received malformed data from AI. Please try again.");
+      // Check if the response was a polite refusal
+      if (text.toLowerCase().includes("unable to fulfill") || text.toLowerCase().includes("cannot confidently provide")) {
+        throw new Error("Criteria too strict. The AI could not find enough matching businesses. Please try relaxing your advanced filters (e.g., 'Years in Operation').");
+      }
+      throw new Error("Received malformed data from AI. Please try again or relax your search filters.");
     }
 
-  } catch (error) {
+  } catch (error: any) {
     console.error("Error fetching business data:", error);
+    // Propagate the specific error message if it was thrown by our parse logic
+    if (error.message && (error.message.includes("Criteria too strict") || error.message.includes("malformed data"))) {
+      throw error;
+    }
     throw new Error("Failed to fetch business data. Please try again.");
   }
 };
