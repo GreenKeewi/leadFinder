@@ -10,7 +10,22 @@ import { BusinessResult, AdvancedSearchOptions } from "../types";
 // SOLUTION: We use Gemini 2.5 Flash with Google Search Grounding to perform the "scrape" intelligently.
 // This is more robust than a static scraper as it adapts to layout changes and can search multiple sources.
 
-const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+// Determine API key from Vite build env (client) or Node env (server)
+const getApiKey = () => {
+  // Vite exposes env vars with the `VITE_` prefix via `import.meta.env` at build time
+  const viteKey = (import.meta.env as any).VITE_API_KEY;
+  // Fallback to Node's process.env when running server-side
+  const nodeKey = typeof process !== 'undefined' ? (process.env.API_KEY as string | undefined) : undefined;
+  return viteKey ?? nodeKey;
+};
+
+const API_KEY = getApiKey();
+
+if (!API_KEY) {
+  throw new Error("An API Key must be set. For client builds set `VITE_API_KEY` in your .env (Vite) or set `process.env.API_KEY` on the server.");
+}
+
+const ai = new GoogleGenAI({ apiKey: API_KEY });
 
 const sanitizeResult = (item: any): BusinessResult => {
   // Guard against null/undefined or non-object items in the array
